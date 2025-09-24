@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Employees</h2>
+  {% if employees|length == 0 %}
+    <p>No employees yet — <a href="{{ url_for('add_employee') }}">Add one</a>.</p>
+  {% else %}
+    <table class="table">
+      <thead><tr><th>ID</th><th>Name</th><th>Designation</th><th>Salary</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for e in employees %}
+          <tr>
+            <td>{{ e.id }}</td>
+            <td>{{ e.name }}</td>
+            <td>{{ e.designation }}</td>
+            <td>{{ "%.2f"|format(e.salary) }}</td>
+            <td class="actions">
+              <a href="{{ url_for('attendance', emp_id=e.id) }}">Attendance</a> |
+              <a href="{{ url_for('payslip', emp_id=e.id) }}">Generate Payslip</a> |
+              <a href="{{ url_for('edit_employee', id=e.id) }}">Edit</a> |
+              <form action="{{ url_for('delete_employee', id=e.id) }}" method="post" style="display:inline" onsubmit="return confirm('Delete?')">
+                <button type="submit" class="linklike">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
